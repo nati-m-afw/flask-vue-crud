@@ -1,6 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import Vue from "vue";
+import VueRouter from "vue-router";
 import Ping from '../components/Ping.vue';
 import Books from '../components/Books.vue';
+
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -16,9 +19,15 @@ const routes = [
   },
 ];
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
+  mode: "history",
+  base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title + ' - ' + 'Flask Vue CRUD' : "Flask-Vue CRUD";
+  next();
 });
 
 export default router;
