@@ -12,6 +12,7 @@ const routes = [
     path: "/",
     name: "Books",
     component: Books,
+    meta: {title: "Books"},
   },
 ];
 
