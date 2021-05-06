@@ -4,8 +4,10 @@
       <div class="col-sm-10">
         <h1>Books</h1>
         <hr />
-
         <br /><br />
+        
+        <alert :msg="msg" v-if="showMsg"/>
+        
         <button
           type="button"
           class="btn btn-success btn-sm"
@@ -98,8 +100,10 @@
 <script>
 // better than fetch
 import axios from "axios";
+import Alert from '../components/Alert.vue';
 
 export default {
+  components: { Alert },
   data() {
     return {
       books: [],
@@ -109,11 +113,18 @@ export default {
         author: "",
         read: [],
       },
+
+      msg: '',
+      showMsg: false,
     };
   },
 
   created() {
     this.getBooks();
+  },
+
+  componets: {
+    alert: Alert,
   },
 
   methods: {
@@ -127,9 +138,12 @@ export default {
     addBook(payload) {
       axios
         .post("http://localhost:5000/books", payload)
-        .then(() => this.getBooks())
+        .then(() => {
+          this.getBooks();
+          this.msg = "Book Added!";
+          this.showMsg = true;
+        })
         .catch((err) => {
-          // eslint-disable-next-line
           console.error(err);
           this.getBooks();
         });
