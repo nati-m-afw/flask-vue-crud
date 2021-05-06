@@ -1,6 +1,6 @@
 import dotenv
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
@@ -41,12 +41,23 @@ def ping_pong():
 
 
 # books route
-@app.route('/books', methods=['GET'])
+@app.route('/books', methods=['GET', 'POST'])
 def books():
-    return {
-        'status': 'success',
-        'books': BOOKS
-    }
+    response = { 'status': 'success'}
+    
+    if request.method == 'POST':
+        postData = request.get_json()
+        BOOKS.append({
+            'title': postData.get('title'),
+            'author': postData.get('author'),
+            'read': postData.get('read')
+        })
+        response['message'] = 'Book added!'
+
+    else:
+        response['books'] = BOOKS
+
+    return response
 
 
 if __name__ == '__main__':
